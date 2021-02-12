@@ -1,12 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import QuestionHeader from '../Components/QuestionPageContents/QuestionHeader';
+import QuestionContent from '../Components/QuestionPageContents//QuestionContent';
+import QuestionData from "../Contents/QuestionData";
 
 const QuestionPage = () => {
-
+    
     return (
-        <h1>
-            Hello this is <strong>QuestionPage</strong>
-        </h1>
+        <>
+            <h1>QuestionPage</h1>
+            <QuestionHeader/>
+            <QuestionContent/>
+        </>
     )
 }
 

@@ -1,12 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import ResponsesGroup from "../Components/ResponsesPageContents/ResponsesGroup";
+import TotalPriceCard from "../Components/ResponsesPageContents/TotalPriceCard";
 
 const ResponsesPage = () => {
 
     return (
-        <h1>
-            Hello this is <strong>ResponsesPage</strong>
-        </h1>
+        <>
+            <h1>
+                ResponsesPage
+            </h1>
+            <ResponsesGroup/>
+            <TotalPriceCard/>
+        </>
     )
 }
 
