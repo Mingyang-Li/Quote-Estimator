@@ -1,14 +1,23 @@
+import {useState}  from 'react';
 import QuestionHeader from '../Components/QuestionPageContents/QuestionHeader';
 import QuestionContent from '../Components/QuestionPageContents//QuestionContent';
-import QuestionData from "../Contents/QuestionData";
+import MainButtonGroup from "../Components/ButtonGroups/MainButtonGroup"
+import SecondaryButtonGroup from "../Components/ButtonGroups/SecondaryButtonGroup";
 
-const QuestionPage = () => {
+const QuestionPage = props => {
+
+    const [selectionType, setSelectionType] = useState("single-select");
     
     return (
         <>
-            <h1>QuestionPage</h1>
-            <QuestionHeader/>
-            <QuestionContent/>
+
+            <QuestionHeader questionIndex={props.questionIndex}/>
+            <QuestionContent 
+                questionIndex={props.questionIndex} 
+                
+            />
+            <MainButtonGroup/>
+            <SecondaryButtonGroup/>
         </>
     )
 }

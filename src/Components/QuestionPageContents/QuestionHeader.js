@@ -1,10 +1,18 @@
-import QuestionNumberAndTopic from "./QuestionNumberAndTopic";
+import QuestionData from "./QuestionData";
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
-const QuestionHeader = () => {
+const QuestionHeader = props => {
+    // const currIndex = props.questionIndex
+    //console.log(QuestionData[currIndex].questionNumber)
     return (
         <>
-            <h2>QuestionHeader</h2>
-            <QuestionNumberAndTopic/>
+            <Card>
+                <CardContent>
+                    <h1>1. Scale</h1>
+                </CardContent>
+            </Card>
         </>
     )
 }

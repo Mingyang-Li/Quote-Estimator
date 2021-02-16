@@ -1,10 +1,8 @@
+import QuestionOptions from "./QuestionOptions";
 
-
-const QuestionContent = () => {
+const QuestionContent = props => {
     return (
-        <>
-        <h2>QuestionContent</h2>
-        </>
+        <QuestionOptions/>
     )
 }
 
