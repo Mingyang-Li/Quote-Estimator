@@ -6,8 +6,8 @@ import ResponsesPage from "./Pages/ResponsesPage";
 import QuestionData from "./Components/QuestionPageContents/QuestionData";
 
 const App = () => {
-  const clickedCalculateCost = "none";
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const clickedCalculateCost = false;
+  const [questionIndex, setQuestionIndex] = useState(4);
   const [selectionType, setSelectionType] = useState(
     QuestionData[questionIndex].selectionType
   );
@@ -15,7 +15,7 @@ const App = () => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   const nextQuestion = () => {
-    if (questionIndex < QuestionData.length) {
+    if (questionIndex < QuestionData.length-1) {
       setQuestionIndex(questionIndex + 1);
     }
   };
