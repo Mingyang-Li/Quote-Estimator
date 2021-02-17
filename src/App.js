@@ -1,34 +1,36 @@
-import {useState}  from 'react';
-import theme from "./theme"
+import { useState } from "react";
+import theme from "./theme";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
-import QuestionPage from './Pages/QuestionPage'
-import ResponsesPage from './Pages/ResponsesPage'
+import QuestionPage from "./Pages/QuestionPage";
+import ResponsesPage from "./Pages/ResponsesPage";
 import QuestionData from "./Components/QuestionPageContents/QuestionData";
 
 const App = () => {
   const clickedCalculateCost = false;
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [selectionType, setSelectionType] = useState(QuestionData[questionIndex].selectionType)
+  const [selectionType, setSelectionType] = useState(
+    QuestionData[questionIndex].selectionType
+  );
   const [allResponses, setAllResponses] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const nextQuestion = () => {
-    if (questionIndex < QuestionData.length){
-      setQuestionIndex(questionIndex + 1)
+    if (questionIndex < QuestionData.length) {
+      setQuestionIndex(questionIndex + 1);
     }
-  }
+  };
 
   const prevQuestion = () => {
-    if (questionIndex > 0){
-      setQuestionIndex(questionIndex - 1)
+    if (questionIndex > 0) {
+      setQuestionIndex(questionIndex - 1);
     }
-  }
+  };
 
   switch (clickedCalculateCost) {
     case false:
       return (
         <MuiThemeProvider theme={theme}>
-          <QuestionPage 
+          <QuestionPage
             questionIndex={questionIndex}
             selectionType={selectionType}
             nextQuestion={nextQuestion}
@@ -39,10 +41,10 @@ const App = () => {
     case true:
       return (
         <MuiThemeProvider theme={theme}>
-          <ResponsesPage/>
+          <ResponsesPage />
         </MuiThemeProvider>
-      );    
+      );
   }
-}
+};
 
 export default App;

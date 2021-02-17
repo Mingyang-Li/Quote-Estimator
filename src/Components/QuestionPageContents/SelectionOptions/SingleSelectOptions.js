@@ -1,26 +1,43 @@
-import React from 'react';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import QuestionData from "../QuestionData";
+import React from "react";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
 
-export default function RadioButtonsGroup() {
-  const [value, setValue] = React.useState('female');
+const SingleSelectOptions = (props) => {
+  const [value, setValue] = React.useState("0 users");
+  // console.log("questionIndex - SingleSelectOptions: " + props.questionIndex);
+  // console.table(QuestionData[props.questionIndex]);
+
+  const currQuestion = QuestionData[props.questionIndex];
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
+  /*
+  console.log(currQuestion.answerOptions);
+  */
 
   return (
     <FormControl component="fieldset">
-      <FormLabel component="legend">Gender</FormLabel>
-      <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-        <FormControlLabel value="female" control={<Radio />} label="Female" />
-        <FormControlLabel value="male" control={<Radio />} label="Male" />
-        <FormControlLabel value="other" control={<Radio />} label="Other" />
-        <FormControlLabel value="disabled" disabled control={<Radio />} label="(Disabled option)" />
+      <RadioGroup
+        aria-label="users"
+        name="users"
+        value={value}
+        onChange={handleChange}
+      >
+        {currQuestion.answerOptions.map(({ answerText, price }) => (
+          <FormControlLabel
+            value={answerText}
+            control={<Radio />}
+            label={answerText}
+            price={price}
+          />
+        ))}
       </RadioGroup>
     </FormControl>
   );
-}
+};
+
+export default SingleSelectOptions;
