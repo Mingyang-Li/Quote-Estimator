@@ -6,7 +6,7 @@ import ResponsesPage from "./Pages/ResponsesPage";
 import QuestionData from "./Components/QuestionPageContents/QuestionData";
 
 const App = () => {
-  const clickedCalculateCost = false;
+  const clickedCalculateCost = "none";
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectionType, setSelectionType] = useState(
     QuestionData[questionIndex].selectionType
