@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from "react";
 import theme from "./theme";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
@@ -6,6 +7,7 @@ import ResponsesPage from "./Pages/ResponsesPage";
 import QuestionData from "./Components/QuestionPageContents/QuestionData";
 
 const App = () => {
+  const MyContext = React.createContext("demo");
   const clickedCalculateCost = false;
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectionType, setSelectionType] = useState(
@@ -26,6 +28,32 @@ const App = () => {
     }
   };
 
+  const backToStart = ()=>{
+    setQuestionIndex(0);
+  }
+
+  const clearCurrentSelection = () => {
+    console.log("clearCurrentSelection fired")
+  }
+
+  const clearAll = () => {
+    console.log("clearAll fired")
+  }
+
+  const calculateTotalPrice = () => {
+    let newTotal = 0;
+    allResponses.forEach((question) => {
+      if (question.selectionType === "single-select") {
+        newTotal += question.estimatedCost;
+      } else if (question.selectionType === "multi-select") {
+        question.selectedAnswers.forEach((checkbox) => {
+          newTotal += checkbox.estimatedCost;
+        });
+      }
+    });
+    setTotalPrice(newTotal);
+  };
+
   switch (clickedCalculateCost) {
     case false:
       return (
@@ -41,7 +69,10 @@ const App = () => {
     case true:
       return (
         <MuiThemeProvider theme={theme}>
-          <ResponsesPage />
+          <ResponsesPage 
+            allResponses={allResponses} 
+            totalPrice={totalPrice}
+          />
         </MuiThemeProvider>
       );
   }
