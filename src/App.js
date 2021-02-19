@@ -6,6 +6,8 @@ import QuestionPage from "./Pages/QuestionPage";
 import ResponsesPage from "./Pages/ResponsesPage";
 import QuestionData from "./Components/QuestionPageContents/QuestionData";
 
+import GlobalProvider from "../src/Contexts/GlobalState";
+
 const App = () => {
   const MyContext = React.createContext("demo");
   const clickedCalculateCost = false;
