@@ -55,7 +55,16 @@ const App = () => {
   };
 
   const states = {
-    questionIndex, nextQuestion, prevQuestion, selectionType, allResponses, totalPrice, backToStart, clearCurrentSelection, clearAll, calculateTotalPrice
+    questionIndex, 
+    selectionType, 
+    allResponses, 
+    totalPrice, 
+    nextQuestion, 
+    prevQuestion, 
+    backToStart, 
+    clearCurrentSelection, 
+    clearAll, 
+    calculateTotalPrice
   }
 
   switch (clickedCalculateCost) {
