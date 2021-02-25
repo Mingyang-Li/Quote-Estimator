@@ -1,19 +1,22 @@
+import {useContext} from 'react';
 import QuestionData from "./QuestionData";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import GlobalContext from '../../Contexts/GlobalContext';
 
-const QuestionHeader = (props) => {
-  // const currIndex = props.questionIndex
-  //console.log(QuestionData[currIndex].questionNumber)
+const QuestionHeader = () => {
+  const {questionIndex} = useContext(GlobalContext);
   return (
     <>
       <Card>
         <CardContent>
           <h1>
-            {QuestionData[props.questionIndex].questionNumber}.{" "}
-            {QuestionData[props.questionIndex].questionTopic}
+            {QuestionData[questionIndex].questionNumber}. {QuestionData[questionIndex].questionTopic} 
           </h1>
+          <h2>
+            {QuestionData[questionIndex].questionText}
+          </h2>
         </CardContent>
       </Card>
     </>

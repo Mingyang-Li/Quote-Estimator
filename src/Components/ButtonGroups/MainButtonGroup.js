@@ -1,16 +1,19 @@
 import Grid from '@material-ui/core/Grid';
+import Paper from "@material-ui/core/Paper"
 import NextQuestionButton from "../Buttons/MainButtons/NextQuestionButton";
 import PreviousQuestionButton from "../Buttons/MainButtons/PreviousQuestionButton";
 
 const MainButtonGroup = (props) => {
   return (
     <>
-        <Grid item xs={12} sm={6}>
-          <PreviousQuestionButton prevQuestion={props.prevQuestion} />
+      <Grid container spacing={24}>
+        <Grid item xs={5}>
+          <PreviousQuestionButton/>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <NextQuestionButton nextQuestion={props.nextQuestion} />
+        <Grid item xs={5}>
+          <NextQuestionButton/>
         </Grid>
+      </Grid>
     </>
   );
 };

@@ -1,8 +1,11 @@
 import { Button } from "@material-ui/core";
+import { useContext } from 'react'
+import GlobalContext from "../../../Contexts/GlobalContext";
 
-const PreviousQuestionButton = (props) => {
+const PreviousQuestionButton = () => {
+  const { prevQuestion } = useContext(GlobalContext);
   return (
-    <Button color="secondary" variant="contained" onClick={props.prevQuestion}>
+    <Button color="secondary" variant="contained" onClick={prevQuestion}>
       Prev
     </Button>
   );

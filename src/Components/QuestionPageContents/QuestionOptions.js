@@ -1,13 +1,18 @@
 import SingleSelectOptions from "./SelectionOptions/SingleSelectOptions";
 import MultiSelectOptions from "./SelectionOptions/MultiSelectOptions";
+import { useContext } from "react";
+import GlobalContext from "../../Contexts/GlobalContext";
+import QuestionData from "./QuestionData";
 
-const QuestionOptions = (props) => {
-  // console.log("selectionType: " + props.selectionType);
-  switch (props.selectionType) {
+const QuestionOptions = () => {
+  const { questionIndex } = useContext(GlobalContext);
+  const selectionType = QuestionData[questionIndex].selectionType;
+  
+  switch (selectionType) {
     case "single-select":
-      return <SingleSelectOptions questionIndex={props.questionIndex} />;
+      return <SingleSelectOptions />;
     case "multi-select":
-      return <MultiSelectOptions questionIndex={props.questionIndex} />;
+      return <MultiSelectOptions />;
   }
 };
 export default QuestionOptions;

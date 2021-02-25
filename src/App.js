@@ -1,32 +1,30 @@
-import React from 'react';
-import { useState } from "react";
+import React, { useContext, useState } from 'react';
+import GlobalContext from "./Contexts/GlobalContext"
 import theme from "./theme";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import QuestionPage from "./Pages/QuestionPage";
 import ResponsesPage from "./Pages/ResponsesPage";
 import QuestionData from "./Components/QuestionPageContents/QuestionData";
 
-import GlobalProvider from "../src/Contexts/GlobalState";
-
 const App = () => {
-  const MyContext = React.createContext("demo");
   const clickedCalculateCost = false;
+
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectionType, setSelectionType] = useState(
-    QuestionData[questionIndex].selectionType
+      QuestionData[questionIndex].selectionType
   );
   const [allResponses, setAllResponses] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const nextQuestion = () => {
-    if (questionIndex < QuestionData.length-1) {
-      setQuestionIndex(questionIndex + 1);
-    }
+      if (questionIndex < QuestionData.length-1) {
+          setQuestionIndex(questionIndex + 1);
+      }
   };
 
   const prevQuestion = () => {
     if (questionIndex > 0) {
-      setQuestionIndex(questionIndex - 1);
+        setQuestionIndex(questionIndex - 1);
     }
   };
 
@@ -45,36 +43,34 @@ const App = () => {
   const calculateTotalPrice = () => {
     let newTotal = 0;
     allResponses.forEach((question) => {
-      if (question.selectionType === "single-select") {
+        if (question.selectionType === "single-select") {
         newTotal += question.estimatedCost;
-      } else if (question.selectionType === "multi-select") {
+        } else if (question.selectionType === "multi-select") {
         question.selectedAnswers.forEach((checkbox) => {
-          newTotal += checkbox.estimatedCost;
+            newTotal += checkbox.estimatedCost;
         });
-      }
+        }
     });
     setTotalPrice(newTotal);
   };
 
+  const states = {
+    questionIndex, nextQuestion, prevQuestion, selectionType, allResponses, totalPrice, backToStart, clearCurrentSelection, clearAll, calculateTotalPrice
+  }
+
   switch (clickedCalculateCost) {
     case false:
       return (
-        <MuiThemeProvider theme={theme}>
-          <QuestionPage
-            questionIndex={questionIndex}
-            selectionType={selectionType}
-            nextQuestion={nextQuestion}
-            prevQuestion={prevQuestion}
-          />
-        </MuiThemeProvider>
+        <GlobalContext.Provider value={states}>
+          <MuiThemeProvider theme={theme}>
+            <QuestionPage/>
+          </MuiThemeProvider>
+        </GlobalContext.Provider>
       );
     case true:
       return (
         <MuiThemeProvider theme={theme}>
-          <ResponsesPage 
-            allResponses={allResponses} 
-            totalPrice={totalPrice}
-          />
+          <ResponsesPage />
         </MuiThemeProvider>
       );
   }

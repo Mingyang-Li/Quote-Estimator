@@ -16,3 +16,7 @@ const theme = createMuiTheme({
 });
 
 export default theme;
+
+/*
+font-family: 'Poppins', sans-serif;
+*/

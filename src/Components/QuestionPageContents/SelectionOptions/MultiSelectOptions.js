@@ -1,36 +1,35 @@
-import React from "react";
+import React, { useContext } from "react";
 import QuestionData from "../QuestionData";
 import Checkbox from "@material-ui/core/Checkbox";
-import RadioGroup from "@material-ui/core/RadioGroup";
+import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
+import GlobalContext from "../../../Contexts/GlobalContext";
 
-const MultiSelectQuestions = (props) => {
+const MultiSelectQuestions = () => {
+  const { questionIndex } = useContext(GlobalContext);
+
   const [checked, setChecked] = React.useState(true);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
 
-  const currQuestion = QuestionData[props.questionIndex];
+  const currQuestion = QuestionData[questionIndex];
 
   return (
     <div>
       <FormControl component="fieldset">
-        <RadioGroup aria-label="users" name="users" onChange={handleChange}>
+        <FormGroup aria-label="users" name="users" onChange={handleChange}>
           {currQuestion.answerOptions.map(({ answerText, price }) => (
             <FormControlLabel
               value={answerText}
-              control={
-                <Checkbox
-                  inputProps={{ "aria-label": "uncontrolled-checkbox" }}
-                />
-              }
+              control={<Checkbox/>}
               label={answerText}
               price={price}
             />
           ))}
-        </RadioGroup>
+        </FormGroup>
       </FormControl>
     </div>
   );
