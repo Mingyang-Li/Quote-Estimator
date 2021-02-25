@@ -3,8 +3,7 @@ import QuestionData from "./QuestionData";
 
 const QuestionContent = () => {
   return (
-    <QuestionOptions
-    />
+    <QuestionOptions/>
   );
 };
 

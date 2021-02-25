@@ -7,13 +7,14 @@ import ResponsesPage from "./Pages/ResponsesPage";
 import QuestionData from "./Components/QuestionPageContents/QuestionData";
 
 const App = () => {
-  const clickedCalculateCost = false;
 
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectionType, setSelectionType] = useState(
       QuestionData[questionIndex].selectionType
   );
   const [allResponses, setAllResponses] = useState([]);
+  const [currSelectedOption, setCurrSelectedOption] = useState({});
+  const [clickedCalculateCost, setClickedCalculateCost] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const nextQuestion = () => {
@@ -28,7 +29,7 @@ const App = () => {
     }
   };
 
-  const backToStart = ()=>{
+  const backToStart = () => {
     setQuestionIndex(0);
   }
 
@@ -40,21 +41,49 @@ const App = () => {
     console.log("clearAll fired")
   }
 
+  const updateCurrSelectedOption = (selectedResponse) => {
+    console.log("updateCurrSelectedOption fired");
+    let tempResponse = {};
+    switch (selectedResponse.selectionType) {
+      case "single-select":
+        if (allResponses.length === 0){
+          // add item into allResponses straightaway
+          tempResponse = {
+            questionIndex: selectedResponse.questionIndex,
+            questionNumber: selectedResponse.questionNumber,
+            selectedAnswer: selectedResponse.selectedAnswer
+          }
+        }
+        else {
+          break;
+        }
+      case "multi-select":
+        break;
+    }
+    setCurrSelectedOption({});
+  }
+
+  const updateAllResponses = () => {
+    console.log("updateAllResponses fired");
+    setAllResponses([]) // sort response objs by qs number!
+  }
+
   const calculateTotalPrice = () => {
     let newTotal = 0;
-    allResponses.forEach((question) => {
-        if (question.selectionType === "single-select") {
-        newTotal += question.estimatedCost;
-        } else if (question.selectionType === "multi-select") {
-        question.selectedAnswers.forEach((checkbox) => {
+    allResponses.forEach((response) => {
+      switch (response.selectionType) {
+        case "single-select":
+          newTotal += response.estimatedCost;
+        case "multi-select":
+          response.selectedAnswers.forEach((checkbox) => {
             newTotal += checkbox.estimatedCost;
-        });
-        }
+          });
+      }   
     });
     setTotalPrice(newTotal);
   };
 
-  const states = {
+  const tools = {
     questionIndex, 
     selectionType, 
     allResponses, 
@@ -64,13 +93,16 @@ const App = () => {
     backToStart, 
     clearCurrentSelection, 
     clearAll, 
+    updateCurrSelectedOption, 
+    updateAllResponses,
+    setClickedCalculateCost,
     calculateTotalPrice
   }
 
   switch (clickedCalculateCost) {
     case false:
       return (
-        <GlobalContext.Provider value={states}>
+        <GlobalContext.Provider value={tools}>
           <MuiThemeProvider theme={theme}>
             <QuestionPage/>
           </MuiThemeProvider>
