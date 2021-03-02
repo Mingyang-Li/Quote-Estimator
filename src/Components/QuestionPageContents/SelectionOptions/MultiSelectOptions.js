@@ -24,8 +24,8 @@ const MultiSelectQuestions = () => {
           {currQuestion.answerOptions.map(({ answerText, price }) => (
             <FormControlLabel
               value={answerText}
-              control={<Checkbox/>}
-              label={answerText}
+              control={<Checkbox />}
+              label={answerText + ": " + price.toString()}
               price={price}
             />
           ))}

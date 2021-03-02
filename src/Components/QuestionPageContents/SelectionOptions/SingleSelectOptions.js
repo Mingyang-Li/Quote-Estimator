@@ -7,34 +7,42 @@ import FormControl from "@material-ui/core/FormControl";
 import GlobalContext from "../../../Contexts/GlobalContext";
 
 const SingleSelectOptions = () => {
-  const { questionIndex } = useContext(GlobalContext);
+  const { questionIndex, updateAllResponses } = useContext(GlobalContext);
 
   const currQuestion = QuestionData[questionIndex];
 
-  const [value, setValue] = useState();
-  const handleChange = (e) => {
-    setValue(e.target.value);
-    console.log("value: " + value);
+  const getAnswers = () => {
+    let allAnswers = [];
+    for (let i = 0; i < currQuestion.answerOptions.length; i++) {
+      allAnswers.push({
+        optionIndex: i,
+        questionIndex: questionIndex,
+        questionNumber: currQuestion.questionNumber,
+        questionTopic: currQuestion.questionTopic,
+        questiontext: currQuestion.questionText,
+        optionText: currQuestion.answerOptions[i].answerText,
+        optionPrice: currQuestion.answerOptions[i].price,
+      });
+    }
+    return allAnswers;
   };
+
+  const answers = getAnswers();
+  console.table(answers);
 
   return (
     <FormControl component="fieldset">
-      <RadioGroup
-        aria-label="users"
-        name="users"
-        // value={value}
-        onChange={handleChange}
-      >
-        {currQuestion.answerOptions.map(
-          ({ questionNumber, answerText, price }) => (
-            <FormControlLabel
-              value={answerText}
-              control={<Radio />}
-              label={answerText}
-              price={price}
-            />
-          )
-        )}
+      <RadioGroup aria-label="users" name="users">
+        {answers.map(({ optionIndex, optionText, optionPrice }) => (
+          <FormControlLabel
+            key={optionText}
+            value={optionText}
+            price={optionPrice}
+            control={<Radio />}
+            label={optionText + ": " + optionPrice.toString()}
+            // onClick={updateAllResponses(answers[optionIndex])}
+          />
+        ))}
       </RadioGroup>
     </FormControl>
   );
