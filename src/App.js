@@ -55,6 +55,7 @@ const App = () => {
     // check & update allAesponses (flow)
     switch (selectionType) {
       case "single-select":
+        console.log("single-select!");
         if (allResponses.length === 0) {
           newResponses.push(selectedResponse);
         } else {
@@ -125,7 +126,6 @@ const App = () => {
     questionIndex,
     selectionType,
     allResponses,
-
     clickedCalculateCost,
     totalPrice,
     nextQuestion,

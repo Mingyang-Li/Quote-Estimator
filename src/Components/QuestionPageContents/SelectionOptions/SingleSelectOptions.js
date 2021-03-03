@@ -11,6 +11,13 @@ const SingleSelectOptions = () => {
 
   const currQuestion = QuestionData[questionIndex];
 
+  const [value, setValue] = useState();
+
+  const handleRadioChange = (event) => {
+    event.preventDefault();
+    setValue(event.target.value);
+  };
+
   const getAnswers = () => {
     let allAnswers = [];
     for (let i = 0; i < currQuestion.answerOptions.length; i++) {
@@ -28,19 +35,24 @@ const SingleSelectOptions = () => {
   };
 
   const answers = getAnswers();
-  console.table(answers);
+  // console.table(answers);
 
   return (
     <FormControl component="fieldset">
-      <RadioGroup aria-label="users" name="users">
+      <RadioGroup
+        aria-label={currQuestion.questionTopic}
+        name={currQuestion.questionTopic}
+        onChange={handleRadioChange}
+      >
         {answers.map(({ optionIndex, optionText, optionPrice }) => (
           <FormControlLabel
+            checked={value === optionText}
             key={optionText}
             value={optionText}
             price={optionPrice}
             control={<Radio />}
-            label={optionText + ": " + optionPrice.toString()}
-            // onClick={updateAllResponses(answers[optionIndex])}
+            label={optionText + ": $" + optionPrice.toString()}
+            // onChange={updateAllResponses(answers[optionIndex])}
           />
         ))}
       </RadioGroup>
