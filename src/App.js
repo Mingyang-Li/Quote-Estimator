@@ -42,20 +42,18 @@ const App = () => {
     setAllResponses([]);
   };
 
+  // declare an array of question numbers for all answered questions
+  const answeredQs = allResponses.map((response) => response.questionNumber);
+
   // Responsible for add, swap or delete and sorting the responses array
   const updateAllResponses = (selectedResponse) => {
-    console.log("updateAllResponses fired");
-
     // declare a temporary array of responses to replace allResponses state
     let newResponses = JSON.parse(JSON.stringify(allResponses));
-
-    // declare an array of question numbers for all answered questions
-    let answeredQs = allResponses.map((response) => response.questionNumber);
+    console.table(selectedResponse);
 
     // check & update allAesponses (flow)
     switch (selectionType) {
       case "single-select":
-        console.log("single-select!");
         if (allResponses.length === 0) {
           newResponses.push(selectedResponse);
         } else {
@@ -75,23 +73,26 @@ const App = () => {
             newResponses.push(selectedResponse);
           }
         }
+        break;
       case "multi-select":
-        if (allResponses.length === 0) {
-          newResponses.push(selectedResponse);
-        } else {
-          // if qs is already answered (qs number in answeredQs)
-          if (answeredQs.includes(selectedResponse.questionNumber)) {
-            // if the clicked checkbox is new (answertext not in any of the selectedAnswers array),
-            // we add currSelectedOption into selected checkboxes array of matching qs
+        console.log("multi-select!");
+        // if (allResponses.length === 0) {
+        //   newResponses.push(selectedResponse);
+        // } else {
+        //   // if qs is already answered (qs number in answeredQs)
+        //   if (answeredQs.includes(selectedResponse.questionNumber)) {
+        //     // if the clicked checkbox is new (answertext not in any of the selectedAnswers array),
+        //     // we add currSelectedOption into selected checkboxes array of matching qs
 
-            // else if the clicked checkbox is not new (answertext already in selectedAnswers array),
-            // we delete the item from selectedAnswers (becos it's unchecked when clicked on)
-            break;
-          } else {
-            // if qs is not answered at all, simply add currSelectedOption into newResponses
-            break;
-          }
-        }
+        //     // else if the clicked checkbox is not new (answertext already in selectedAnswers array),
+        //     // we delete the item from selectedAnswers (becos it's unchecked when clicked on)
+        //     break;
+        //   } else {
+        //     // if qs is not answered at all, simply add currSelectedOption into newResponses
+        //     break;
+        //   }
+        // }
+        break;
     }
 
     // Sort allResponses by questionnNumber (ascending)

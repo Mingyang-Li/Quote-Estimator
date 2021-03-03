@@ -30,6 +30,10 @@ const SingleSelectOptions = () => {
         optionText: currQuestion.answerOptions[i].answerText,
         optionPrice: currQuestion.answerOptions[i].price,
       });
+
+      // console.log(
+      //   `question ${currQuestion.questionNumber} option ${currQuestion.answerOptions[i].answerText} is mapped`
+      // );
     }
     return allAnswers;
   };
@@ -42,17 +46,16 @@ const SingleSelectOptions = () => {
       <RadioGroup
         aria-label={currQuestion.questionTopic}
         name={currQuestion.questionTopic}
-        onChange={handleRadioChange}
+        // onChange={handleRadioChange}
       >
         {answers.map(({ optionIndex, optionText, optionPrice }) => (
           <FormControlLabel
-            checked={value === optionText}
             key={optionText}
             value={optionText}
             price={optionPrice}
             control={<Radio />}
             label={optionText + ": $" + optionPrice.toString()}
-            // onChange={updateAllResponses(answers[optionIndex])}
+            onChange={() => updateAllResponses(answers[optionIndex])}
           />
         ))}
       </RadioGroup>
