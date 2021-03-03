@@ -8,15 +8,7 @@ import GlobalContext from "../../../Contexts/GlobalContext";
 
 const SingleSelectOptions = () => {
   const { questionIndex, updateAllResponses } = useContext(GlobalContext);
-
   const currQuestion = QuestionData[questionIndex];
-
-  const [value, setValue] = useState();
-
-  const handleRadioChange = (event) => {
-    event.preventDefault();
-    setValue(event.target.value);
-  };
 
   const getAnswers = () => {
     let allAnswers = [];
@@ -27,8 +19,10 @@ const SingleSelectOptions = () => {
         questionNumber: currQuestion.questionNumber,
         questionTopic: currQuestion.questionTopic,
         questiontext: currQuestion.questionText,
-        optionText: currQuestion.answerOptions[i].answerText,
-        optionPrice: currQuestion.answerOptions[i].price,
+        userResponse: {
+          optionText: currQuestion.answerOptions[i].answerText,
+          optionPrice: currQuestion.answerOptions[i].price,
+        },
       });
 
       // console.log(
@@ -48,14 +42,18 @@ const SingleSelectOptions = () => {
         name={currQuestion.questionTopic}
         // onChange={handleRadioChange}
       >
-        {answers.map(({ optionIndex, optionText, optionPrice }) => (
+        {answers.map(({ optionIndex, userResponse }) => (
           <FormControlLabel
-            key={optionText}
-            value={optionText}
-            price={optionPrice}
+            key={userResponse.optionText}
+            value={userResponse.optionText}
+            price={userResponse.optionPrice}
             control={<Radio />}
-            label={optionText + ": $" + optionPrice.toString()}
-            onChange={() => updateAllResponses(answers[optionIndex])}
+            label={
+              userResponse.optionText +
+              ": $" +
+              userResponse.optionPrice.toString()
+            }
+            onClick={() => updateAllResponses(answers[optionIndex])}
           />
         ))}
       </RadioGroup>

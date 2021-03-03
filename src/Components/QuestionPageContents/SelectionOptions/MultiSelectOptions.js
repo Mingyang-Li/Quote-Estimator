@@ -7,26 +7,50 @@ import FormControl from "@material-ui/core/FormControl";
 import GlobalContext from "../../../Contexts/GlobalContext";
 
 const MultiSelectQuestions = () => {
-  const { questionIndex } = useContext(GlobalContext);
+  const { questionIndex, updateAllResponses } = useContext(GlobalContext);
+  const currQuestion = QuestionData[questionIndex];
 
-  const [checked, setChecked] = React.useState(true);
+  const getAnswers = () => {
+    let allAnswers = [];
+    for (let i = 0; i < currQuestion.answerOptions.length; i++) {
+      allAnswers.push({
+        optionIndex: i,
+        questionIndex: currQuestion.questionIndex,
+        questionNumber: currQuestion.questionNumber,
+        questionTopic: currQuestion.questionTopic,
+        questiontext: currQuestion.questionText,
+        userResponse: {
+          optionText: currQuestion.answerOptions[i].answerText,
+          optionPrice: currQuestion.answerOptions[i].price,
+        },
+      });
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
+      // console.log(
+      //   `question ${currQuestion.questionNumber} option ${currQuestion.answerOptions[i].answerText} is mapped`
+      // );
+    }
+    return allAnswers;
   };
 
-  const currQuestion = QuestionData[questionIndex];
+  const answers = getAnswers();
+  // console.table(answers);
 
   return (
     <div>
       <FormControl component="fieldset">
-        <FormGroup aria-label="users" name="users" onChange={handleChange}>
-          {currQuestion.answerOptions.map(({ answerText, price }) => (
+        <FormGroup aria-label="users" name="users">
+          {answers.map(({ optionIndex, userResponse }) => (
             <FormControlLabel
-              value={answerText}
+              key={userResponse.optionText}
+              value={userResponse.optionText}
               control={<Checkbox />}
-              label={answerText + ": " + price.toString()}
-              price={price}
+              label={
+                userResponse.optionText +
+                ": $" +
+                userResponse.optionPrice.toString()
+              }
+              price={userResponse.optionPrice}
+              // onClick={() => updateAllResponses(currQuestion[optionIndex])}
             />
           ))}
         </FormGroup>

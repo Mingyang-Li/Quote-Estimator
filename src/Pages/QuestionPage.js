@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import QuestionHeader from "../Components/QuestionPageContents/QuestionHeader";
 import QuestionContent from "../Components/QuestionPageContents//QuestionContent";
 import MainButtonGroup from "../Components/ButtonGroups/MainButtonGroup";
@@ -7,8 +6,8 @@ import SecondaryButtonGroup from "../Components/ButtonGroups/SecondaryButtonGrou
 const QuestionPage = () => {
   return (
     <>
-      <QuestionHeader/>
-      <MainButtonGroup/>
+      <QuestionHeader />
+      <MainButtonGroup />
       <SecondaryButtonGroup />
       <QuestionContent />
     </>

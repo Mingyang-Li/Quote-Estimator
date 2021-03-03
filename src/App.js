@@ -8,11 +8,11 @@ import QuestionData from "./Components/QuestionPageContents/QuestionData";
 import TestingData from "./Components/QuestionPageContents/TestingData";
 
 const App = () => {
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(4);
   const [selectionType, setSelectionType] = useState(
     QuestionData[questionIndex].selectionType
   );
-  const [allResponses, setAllResponses] = useState(TestingData);
+  const [allResponses, setAllResponses] = useState([]);
   const [clickedCalculateCost, setClickedCalculateCost] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -42,81 +42,163 @@ const App = () => {
     setAllResponses([]);
   };
 
-  // declare an array of question numbers for all answered questions
-  const answeredQs = allResponses.map((response) => response.questionNumber);
-
   // Responsible for add, swap or delete and sorting the responses array
   const updateAllResponses = (selectedResponse) => {
-    // declare a temporary array of responses to replace allResponses state
-    let newResponses = JSON.parse(JSON.stringify(allResponses));
-    console.table(selectedResponse);
-
     // check & update allAesponses (flow)
     switch (selectionType) {
       case "single-select":
-        if (allResponses.length === 0) {
-          newResponses.push(selectedResponse);
-        } else {
-          // if qs is already answered, update ans, else add new ans
-          if (answeredQs.includes(selectedResponse.questionNumber)) {
-            for (let i = 0; i < allResponses.length; i++) {
-              if (
-                allResponses[i].questionNumber ===
-                selectedResponse.questionNumber
-              ) {
-                break;
-              } else {
-                break;
-              }
-            }
-          } else {
-            newResponses.push(selectedResponse);
-          }
-        }
+        updateSingleSelect(selectedResponse);
         break;
-      case "multi-select":
-        console.log("multi-select!");
-        // if (allResponses.length === 0) {
-        //   newResponses.push(selectedResponse);
-        // } else {
-        //   // if qs is already answered (qs number in answeredQs)
-        //   if (answeredQs.includes(selectedResponse.questionNumber)) {
-        //     // if the clicked checkbox is new (answertext not in any of the selectedAnswers array),
-        //     // we add currSelectedOption into selected checkboxes array of matching qs
 
-        //     // else if the clicked checkbox is not new (answertext already in selectedAnswers array),
-        //     // we delete the item from selectedAnswers (becos it's unchecked when clicked on)
-        //     break;
-        //   } else {
-        //     // if qs is not answered at all, simply add currSelectedOption into newResponses
-        //     break;
-        //   }
-        // }
+      case "multi-select":
+        updateMultiSelect(selectedResponse);
         break;
     }
+  };
 
-    // Sort allResponses by questionnNumber (ascending)
-    newResponses.sort((item1, item2) => {
+  function updateSingleSelect(response) {
+    if (allResponses.length === 0) {
+      setAllResponses({
+        questionIndex: response.questionIndex,
+        questionNumber: response.questionNumber,
+        questionTopic: response.questionTopic,
+        questiontext: response.questionText,
+        userResponse: response.userResponse,
+      });
+    } else {
+      // make a copy of original responses array
+      const copiedAllResponses = TestingData;
+
+      const answeredQs = getAnsweredQs(copiedAllResponses);
+
+      if (answeredQs.includes(response.questionNumber)) {
+        for (let i = 0; i < copiedAllResponses.length; i++) {
+          if (
+            copiedAllResponses[i].questionNumber === response.questionNumber
+          ) {
+            copiedAllResponses[i].userResponse = response.userResponse;
+          }
+        }
+        // no need to sort responses, as they're already sorted, we're only updating user responses
+      } else {
+        copiedAllResponses.push({
+          questionIndex: response.questionIndex,
+          questionNumber: response.questionNumber,
+          questionTopic: response.questionTopic,
+          questiontext: response.questionText,
+          userResponse: response.userResponse,
+        });
+        sortTempResponses(copiedAllResponses);
+      }
+      // Updating allResponses with copiedAllResponses
+      setAllResponses(copiedAllResponses);
+    }
+  }
+
+  function updateMultiSelect(response) {
+    if (allResponses.length === 0) {
+      setAllResponses({
+        questionIndex: response.questionIndex,
+        questionNumber: response.questionNumber,
+        questionTopic: response.questionTopic,
+        questiontext: response.questionText,
+        userResponse: [response.userResponse],
+      });
+    } else {
+      // make a copy of original responses array
+      const copiedAllResponses = TestingData;
+
+      // initialise an array to be populated by question numbers for all answered questions
+      const answeredQs = getAnsweredQs(copiedAllResponses);
+
+      // if qs is already answered (qs number in answeredQs), we need to check if the checked box is already checked
+      if (answeredQs.includes(response.questionNumber)) {
+        // for all the anwered questions
+        for (let i = 0; i < copiedAllResponses.length; i++) {
+          // if the question number is the same as the qs num of the checked box
+          if (
+            copiedAllResponses[i].questionNumber === response.questionNumber
+          ) {
+            // we create an temoary array of its selected checkboxes,
+            // (which includes both optionText AND optionPrice) - for updating the state
+            let selectedCheckboxes = copiedAllResponses[i].userResponse;
+
+            // we create another array which only has the optionText of selected checkboxes
+            const selectedOptionTexts = selectedCheckboxes.map(
+              (item) => item.optionText
+            );
+
+            // if optionText of the selected response doesn't exist in the array for the selected checkboxes of optionText
+            // we add userResponse of the selected checkbox into selectedCheckboxes
+            if (
+              !selectedOptionTexts.includes(response.userResponse.optionText)
+            ) {
+              selectedCheckboxes.push(response.userResponse);
+            } else {
+              // if optionText of the selected response already exist in the array for the selected checkboxes of optionText
+              // we remove the equivalent object from selectedCheckboxes by its index
+              for (let j = 0; j < selectedCheckboxes.length; j++) {
+                if (selectedCheckboxes[j].optionText === response.optionText) {
+                  selectedCheckboxes.splice(j, 1);
+                }
+              }
+            }
+
+            // Once checkboxes have been updated, we set the updated selectedCheckboxes to be the userResponse of the current question
+            copiedAllResponses[i].userResponse = selectedCheckboxes;
+          }
+        }
+      } else {
+        // if the question number of checked box is NOT in answeredQs,
+        // we simply add a new object into copiedAllResponses
+        // keep in mind that you'll need an ARRAY to store all checkbox responses
+        copiedAllResponses.push({
+          questionIndex: response.questionIndex,
+          questionNumber: response.questionNumber,
+          questionTopic: response.questionTopic,
+          questiontext: response.questionText,
+          userResponse: [response.userResponse],
+        });
+
+        // You need to sort copiedAllResponses once you've added a new object
+        // This is because user might not be answering questions in order
+        sortTempResponses(copiedAllResponses);
+      }
+
+      // Update the state for allResponses with the latest copiedAllResponses
+      setAllResponses(copiedAllResponses);
+    }
+  }
+
+  // Declare function to populate answeredQs
+  function getAnsweredQs(answeredQuestions) {
+    let tempArr = [];
+    for (let i = 0; i < answeredQuestions.length; i++) {
+      tempArr.push(answeredQuestions[i].questionNumber);
+    }
+    return tempArr;
+  }
+
+  // Sort allResponses by questionnNumber (ascending) when called
+  function sortTempResponses(responses) {
+    responses.sort((item1, item2) => {
       if (item1.questionNumber > item2.questionNumber) {
         return 1;
       } else {
         return -1;
       }
     });
-
-    // Updating allResponses with newResponses
-    setAllResponses(newResponses);
-  };
+  }
 
   const calculateTotalPrice = () => {
     let newTotal = 0;
     allResponses.forEach((response) => {
       switch (response.selectionType) {
         case "single-select":
-          newTotal += response.estimatedCost;
+          newTotal += response.userResponse.optionPrice;
         case "multi-select":
-          response.selectedAnswers.forEach((checkbox) => {
-            newTotal += checkbox.estimatedCost;
+          response.userResponse.forEach((checkbox) => {
+            newTotal += checkbox.optionPrice;
           });
       }
     });
@@ -143,7 +225,6 @@ const App = () => {
       return (
         <GlobalContext.Provider value={tools}>
           <MuiThemeProvider theme={theme}>
-            <h2>Total price: {totalPrice}</h2>
             <QuestionPage />
           </MuiThemeProvider>
         </GlobalContext.Provider>
