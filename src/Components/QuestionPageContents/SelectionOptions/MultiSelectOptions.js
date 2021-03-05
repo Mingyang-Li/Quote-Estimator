@@ -10,19 +10,29 @@ const MultiSelectQuestions = () => {
   const { questionIndex, updateAllResponses } = useContext(GlobalContext);
   const currQuestion = QuestionData[questionIndex];
 
-  const getAnswers = () => {
+  // We need to get the details of each option,
+  // because whenever a checkbox is clicked, 
+  // the fired onClick event handler needs to know exactly which option was selected, 
+  // along with the data for the current question
+  // This is why we pass an unique optionIndex for each optiontext, 
+  // just so that we can capture the selected option in jsx mapping
+  const getMultiSelectOptionDetails = () => {
     let allAnswers = [];
     for (let i = 0; i < currQuestion.answerOptions.length; i++) {
       allAnswers.push({
-        optionIndex: i,
+        optionIndex: i, // VERY IMPORTANT!
         questionIndex: currQuestion.questionIndex,
         questionNumber: currQuestion.questionNumber,
         questionTopic: currQuestion.questionTopic,
-        questiontext: currQuestion.questionText,
+        questionText: currQuestion.questionText,
         userResponse: {
           optionText: currQuestion.answerOptions[i].answerText,
           optionPrice: currQuestion.answerOptions[i].price,
         },
+        checkedStatus: false,
+        // need to work on how to make checkedStatus truly dynamic 
+        // checkedStatus from this function needs to get upated when 
+        // updateMultiSelect from App.js is triggered
       });
 
       // console.log(
@@ -32,15 +42,21 @@ const MultiSelectQuestions = () => {
     return allAnswers;
   };
 
-  const answers = getAnswers();
+  // const confirmCheckedStatus = () => {
+
+  // }
+
+  // Function call to obtain the option details 
+  const answers = getMultiSelectOptionDetails();
   // console.table(answers);
 
   return (
-    <div>
+
       <FormControl component="fieldset">
         <FormGroup aria-label="users" name="users">
-          {answers.map(({ optionIndex, userResponse }) => (
+          {answers.map(({ optionIndex, userResponse, checkedStatus }) => (
             <FormControlLabel
+              // checked={checkedStatus}
               key={userResponse.optionText}
               value={userResponse.optionText}
               control={<Checkbox />}
@@ -50,12 +66,12 @@ const MultiSelectQuestions = () => {
                 userResponse.optionPrice.toString()
               }
               price={userResponse.optionPrice}
-              // onClick={() => updateAllResponses(currQuestion[optionIndex])}
+              onClick={() => updateAllResponses(answers[optionIndex])}
             />
           ))}
         </FormGroup>
       </FormControl>
-    </div>
+
   );
 };
 

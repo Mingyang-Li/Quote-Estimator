@@ -10,7 +10,7 @@ const SingleSelectOptions = () => {
   const { questionIndex, updateAllResponses } = useContext(GlobalContext);
   const currQuestion = QuestionData[questionIndex];
 
-  const getAnswers = () => {
+  const getSingleSelectAnswerDetails = () => {
     let allAnswers = [];
     for (let i = 0; i < currQuestion.answerOptions.length; i++) {
       allAnswers.push({
@@ -18,7 +18,7 @@ const SingleSelectOptions = () => {
         questionIndex: questionIndex,
         questionNumber: currQuestion.questionNumber,
         questionTopic: currQuestion.questionTopic,
-        questiontext: currQuestion.questionText,
+        questionText: currQuestion.questionText,
         userResponse: {
           optionText: currQuestion.answerOptions[i].answerText,
           optionPrice: currQuestion.answerOptions[i].price,
@@ -32,7 +32,7 @@ const SingleSelectOptions = () => {
     return allAnswers;
   };
 
-  const answers = getAnswers();
+  const answers = getSingleSelectAnswerDetails();
   // console.table(answers);
 
   return (
@@ -40,7 +40,6 @@ const SingleSelectOptions = () => {
       <RadioGroup
         aria-label={currQuestion.questionTopic}
         name={currQuestion.questionTopic}
-        // onChange={handleRadioChange}
       >
         {answers.map(({ optionIndex, userResponse }) => (
           <FormControlLabel
