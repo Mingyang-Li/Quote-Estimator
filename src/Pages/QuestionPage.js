@@ -6,14 +6,9 @@ import { useContext } from "react";
 import GlobalContext from "../Contexts/GlobalContext";
 
 const QuestionPage = () => {
-  const {allResponses} = useContext(GlobalContext);
+  const { allResponses } = useContext(GlobalContext);
   return (
     <>
-    {/* {
-      allResponses.map((res) => {
-        <code>{res.questionNumber}. {res.userResponse}</code>
-      })
-    } */}
       <code>{JSON.stringify(allResponses)}</code>
       <QuestionHeader />
       <MainButtonGroup />

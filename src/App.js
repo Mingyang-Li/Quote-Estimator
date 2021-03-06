@@ -44,9 +44,9 @@ const App = () => {
   };
 
   // Responsible for add, swap or delete and sorting the responses array
-  const updateAllResponses = (selectedResponse) =>{
+  const updateAllResponses = (selectedResponse) => {
     // check & update allAesponses (flow)
-    switch (selectionType) {
+    switch (selectedResponse.selectionType) {
       case "single-select":
         // console.log("firing updateSingleSelect");
         updateSingleSelect(selectedResponse);
@@ -58,36 +58,41 @@ const App = () => {
   };
 
   function updateSingleSelect(response) {
-    console.table(response)
+    // console.table(response);
     if (allResponses.length === 0) {
-      setAllResponses([{
-        questionIndex: response.questionIndex,
-        questionNumber: response.questionNumber,
-        questionTopic: response.questionTopic,
-        questiontext: response.questionText,
-        userResponse: response.userResponse,
-      }]);
+      setAllResponses([
+        {
+          // questionIndex: response.questionIndex,
+          questionNumber: response.questionNumber,
+          questionTopic: response.questionTopic,
+          selectionType: response.selectionType,
+          questiontext: response.questionText,
+          userResponse: response.userResponse,
+        },
+      ]);
     } else {
-      // Make a copy of original allResponses, 
+      // Make a copy of original allResponses,
       // This is because we don't want to update the state too many times in one render
       // Optional: use allResponses state for production, or TestingData for dev
-      const copiedAllResponses = allResponses.map(res => ({...res}));
+      const copiedAllResponses = allResponses.map((res) => ({ ...res }));
 
       // console.log("copiedAllResponses.length: " + copiedAllResponses.length);
 
       const answeredQs = getAnsweredQs(copiedAllResponses);
-      console.log("answeredQs: " + answeredQs);
+      // console.log("answeredQs: " + answeredQs);
 
       // if selected response belongs to one of the already answered question
       if (answeredQs.includes(response.questionNumber)) {
         for (let i = 0; i < copiedAllResponses.length; i++) {
           // we loop till we find the anwered question with the same qs number as the selected qs
-          if (copiedAllResponses[i].questionNumber === response.questionNumber) {
-            // We update the answer if the answers aren't the same, or leave it if they are the same  
-            if (copiedAllResponses[i].userResponse !== response.userResponse){
+          if (
+            copiedAllResponses[i].questionNumber === response.questionNumber
+          ) {
+            // We update the answer if the answers aren't the same, or leave it if they are the same
+            if (copiedAllResponses[i].userResponse !== response.userResponse) {
               copiedAllResponses[i].userResponse = response.userResponse;
-              // Once answer is updated, 
-              // there's no need to sort responses, as they're already sorted, 
+              // Once answer is updated,
+              // there's no need to sort responses, as they're already sorted,
               // we're only updating user responses
             }
           }
@@ -95,9 +100,10 @@ const App = () => {
       } else {
         // if question hasn't been answered, just add the new response to copiedAllResponses
         copiedAllResponses.push({
-          questionIndex: response.questionIndex,
+          // questionIndex: response.questionIndex,
           questionNumber: response.questionNumber,
           questionTopic: response.questionTopic,
+          selectionType: response.selectionType,
           questiontext: response.questionText,
           userResponse: response.userResponse,
         });
@@ -110,7 +116,6 @@ const App = () => {
   }
 
   function updateMultiSelect(response) {
-
     // First, reverse the checkedStatus of the checkbox whenever one is being clicked - regardless
     // response.checkedStatus = !response.checkedStatus;
     // console.log("response.checkedStatus: " + response.checkedStatus);
@@ -118,16 +123,19 @@ const App = () => {
     // console.table(response.userResponse);
 
     if (allResponses.length === 0) {
-      setAllResponses([{
-        questionIndex: response.questionIndex,
-        questionNumber: response.questionNumber,
-        questionTopic: response.questionTopic,
-        questionText: response.questionText,
-        userResponse: [response.userResponse],
-      }]);
+      setAllResponses([
+        {
+          // questionIndex: response.questionIndex,
+          questionNumber: response.questionNumber,
+          questionTopic: response.questionTopic,
+          selectionType: response.selectionType,
+          questionText: response.questionText,
+          userResponse: [response.userResponse],
+        },
+      ]);
     } else {
       // Make a copy of original allResponses
-      const copiedAllResponses = allResponses.map(res => ({...res})); 
+      let copiedAllResponses = allResponses.map((res) => ({ ...res }));
       // console.table(copiedAllResponses);
 
       // initialise an array to be populated by question numbers for all answered questions
@@ -139,31 +147,43 @@ const App = () => {
         console.log("question already answered");
         // for all the anwered questions
         for (let i = 0; i < copiedAllResponses.length; i++) {
-          if (copiedAllResponses[i].questionNumber === response.questionNumber) {
+          if (
+            copiedAllResponses[i].questionNumber === response.questionNumber
+          ) {
             // If the question number is the same as the qs num of the checked box (qs already answered),
             // We create an temporary array of its selected checkboxes,
             // (which includes both optionText AND optionPrice) - for updating the state
             let selectedCheckboxes = copiedAllResponses[i].userResponse;
-            // console.table(selectedCheckboxes)
-
-            // We create another array which only has the optionText of selected checkboxes
-            let selectedOptionTexts = selectedCheckboxes.map(
-              (checkbox) => checkbox.optionText
-            );
-            // console.log("selectedOptionTexts :" + selectedOptionTexts);
+            // console.table(selectedCheckboxes);
 
             // If optionText of the selected response doesn't exist in the array for the selected checkboxes of optionText,
             // we add userResponse of the selected checkbox into selectedCheckboxes
-            if (selectedOptionTexts.includes(response.userResponse.optionText) === false) {
-              console.log("need to add this checkbox");
-              // console.log("need to CHECK " + response.userResponse.optionText)
-              selectedCheckboxes.push(response.userResponse);
-            } else {
-              console.log("need to remove this checkbox");
+            if (selectedCheckboxes.includes(response.userResponse) === false) {
+              // console.log(
+              //   "option checked: " + response.userResponse.optionText
+              // );
+
+              // Add new item into selectedCheckboxes
+              selectedCheckboxes = [
+                ...selectedCheckboxes,
+                response.userResponse,
+              ];
+              // console.log(selectedCheckboxes);
+              // For some weird reason, when you log selectedCheckboxes,
+              // there's always an extra item pushed into selectedCheckboxes,
+              // I have to remove the last (extra) item from selectedCheckboxes to make sure only 1 item is added
+              selectedCheckboxes.splice(selectedCheckboxes.length - 1, 1);
+            } else if (selectedCheckboxes.includes(response.userResponse)) {
+              // console.log(
+              //   "option UNCHECKED: " + response.userResponse.optionText
+              // );
+
               // console.log("need to uncheck " + response.userResponse.optionText)
               // If optionText of the selected response already exist in the array for the selected checkboxes of optionText
               // we remove the equivalent object from selectedCheckboxes by its index
-              selectedCheckboxes.pop(selectedCheckboxes.indexOf(response.userResponse))
+              selectedCheckboxes.pop(
+                selectedCheckboxes.indexOf(response.userResponse)
+              );
             }
 
             // Once checkboxes have been updated, we set the updated selectedCheckboxes to be the userResponse of the current question
@@ -175,13 +195,22 @@ const App = () => {
         // If the question number of checked box is NOT in answeredQs,
         // we simply add a new object into copiedAllResponses
         // Keep in mind that you'll need an ARRAY to store all checkbox responses
-        copiedAllResponses.push({
-          questionIndex: response.questionIndex,
+
+        // Make new item to add to copiedAllResponses
+        let newResponse = {
           questionNumber: response.questionNumber,
           questionTopic: response.questionTopic,
+          selectionType: response.selectionType,
           questiontext: response.questionText,
           userResponse: [response.userResponse],
-        });
+        };
+
+        // Add new item to the end of copiedAllResponses
+        copiedAllResponses = [...copiedAllResponses, newResponse];
+        // console.log(copiedAllResponses);
+
+        // Getting rid of the EXTRA item added at the end of copiedAllResponses during spread operation
+        copiedAllResponses.splice(copiedAllResponses.length - 1, 1);
 
         // You need to sort copiedAllResponses once you've added a new object
         // This is because user might not be answering questions in order
@@ -204,7 +233,7 @@ const App = () => {
 
   // Sort allResponses by questionnNumber (ascending) when called
   function sortTempResponses(responses) {
-    if (responses.length > 1){
+    if (responses.length > 1) {
       responses.sort((item1, item2) => {
         if (item1.questionNumber > item2.questionNumber) {
           return 1;

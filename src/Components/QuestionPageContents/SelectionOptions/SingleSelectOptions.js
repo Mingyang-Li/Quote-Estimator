@@ -18,6 +18,7 @@ const SingleSelectOptions = () => {
         questionIndex: questionIndex,
         questionNumber: currQuestion.questionNumber,
         questionTopic: currQuestion.questionTopic,
+        selectionType: currQuestion.selectionType,
         questionText: currQuestion.questionText,
         userResponse: {
           optionText: currQuestion.answerOptions[i].answerText,
