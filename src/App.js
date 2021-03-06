@@ -130,12 +130,15 @@ const App = () => {
       ]);
       return null;
     } else {
-      console.log("allResponse is NOT empty");
       // console.table(response);
       let copiedAllResponses = allResponses.map((res) => ({ ...res }));
       const answeredQs = getAnsweredQs(copiedAllResponses);
-      // if qs is new, add new response
+
+      // if qs is new, (reaponse is also new), add new response
       if (answeredQs.includes(response.questionNumber) === false) {
+        console.log(
+          "allResponses is NOT empty, but this question hasn't been answered yet"
+        );
         let newResponse = {
           questionNumber: response.questionNumber,
           questionTopic: response.questionTopic,
@@ -146,24 +149,41 @@ const App = () => {
         copiedAllResponses = [...copiedAllResponses, newResponse];
         copiedAllResponses.splice(copiedAllResponses.length - 1, 1);
         sortTempResponses(copiedAllResponses);
+        setAllResponses(copiedAllResponses);
+        console.log("new response ADDED to allResponses");
       } else {
+        // debugger;
         // if qs already answered, verify checkboxes -> add or remove checkboxes accordingly
-        // console.log("response.questionIndex: " + response.questionIndex);
-        let selectedCheckboxes =
-          copiedAllResponses[response.questionIndex].userResponse;
+        // ---------------------------------------------------------------
+        // Extract an array of selected options (selectedCheckboxes)
+        let selectedCheckboxes = getSelectedCheckboxes(response);
 
+        // If checkbox option already exists in the array of checkboxes, remove it from selectedCheckboxes
         if (selectedCheckboxes.includes(response.userResponse)) {
           selectedCheckboxes.pop(
             selectedCheckboxes.indexOf(response.userResponse)
           );
-        } else {
+          // Assign selectedCheckboxes to the userResponse object of copiedAllResponses
+          // First, get index of question to have its checkboxes obj replaced
+          let i = getIndexOfQuestion(response);
+
+          // Use the obtained index i to get the question to replace checkboxes from
+          copiedAllResponses[i].userResponse = selectedCheckboxes;
+          setAllResponses(copiedAllResponses);
+          console.log("checkbox unchecked, data removed from allResponses");
+        }
+        // Else if checkbox option does not exists, add it to selectedCheckboxes
+        else {
           selectedCheckboxes = [...selectedCheckboxes, response.userResponse];
           selectedCheckboxes.splice(selectedCheckboxes.length - 1, 1);
+          // Assign selectedCheckboxes to the userResponse object of copiedAllResponses
+          copiedAllResponses[
+            response.optionIndex
+          ].userResponse = selectedCheckboxes;
+          setAllResponses(copiedAllResponses);
+          console.log("new response added to allResponses");
         }
-        copiedAllResponses[
-          response.optionIndex
-        ].userResponse = selectedCheckboxes;
-        setAllResponses(copiedAllResponses);
+        // -----------------------------------------------------------------
       }
     }
   }
@@ -174,6 +194,27 @@ const App = () => {
       tempArr.push(answeredQuestions[i].questionNumber);
     }
     return tempArr;
+  }
+
+  // Function to obtain an array of selected checkboxes of a selected question
+  function getSelectedCheckboxes(currResponse) {
+    let checkboxes = [];
+    for (let i = 0; i < allResponses.length; i++) {
+      if (allResponses[i].questionNumber === currResponse.questionNumber) {
+        // console.log("match found!");
+        checkboxes = allResponses[i].userResponse;
+        break;
+      }
+    }
+    return checkboxes;
+  }
+
+  function getIndexOfQuestion(currResponse) {
+    for (let i = 0; i < allResponses.length; i++) {
+      if (allResponses[i].questionNumber === currResponse.questionNumber) {
+        return i;
+      }
+    }
   }
 
   // Sort allResponses by questionnNumber (ascending) when called

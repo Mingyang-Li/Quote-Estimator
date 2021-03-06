@@ -32,8 +32,8 @@ const MultiSelectQuestions = () => {
         },
         checkedStatus: false,
         // need to work on how to make checkedStatus truly dynamic
-        // checkedStatus from this function needs to get upated when
-        // updateMultiSelect from App.js is triggered
+        // checkedStatus from needs to get upated LOCALLY when
+        // global method updateMultiSelect from App.js is triggered
       });
     }
     return allAnswers;
@@ -65,5 +65,4 @@ const MultiSelectQuestions = () => {
     </FormControl>
   );
 };
-
 export default MultiSelectQuestions;
