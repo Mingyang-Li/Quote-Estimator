@@ -21,7 +21,7 @@ const MultiSelectQuestions = () => {
     for (let i = 0; i < currQuestion.answerOptions.length; i++) {
       allAnswers.push({
         optionIndex: i, // VERY IMPORTANT!
-        questionIndex: currQuestion.questionIndex,
+        questionIndex: questionIndex,
         questionNumber: currQuestion.questionNumber,
         questionTopic: currQuestion.questionTopic,
         selectionType: currQuestion.selectionType,
@@ -35,17 +35,9 @@ const MultiSelectQuestions = () => {
         // checkedStatus from this function needs to get upated when
         // updateMultiSelect from App.js is triggered
       });
-
-      // console.log(
-      //   `question ${currQuestion.questionNumber} option ${currQuestion.answerOptions[i].answerText} is mapped`
-      // );
     }
     return allAnswers;
   };
-
-  // const confirmCheckedStatus = () => {
-
-  // }
 
   // Function call to obtain the option details
   const answers = getMultiSelectOptionDetails();
