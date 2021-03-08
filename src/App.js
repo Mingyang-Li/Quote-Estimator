@@ -139,6 +139,7 @@ const App = () => {
         console.log(
           "allResponses is NOT empty, but this question hasn't been answered yet"
         );
+        debugger;
         let newResponse = {
           questionNumber: response.questionNumber,
           questionTopic: response.questionTopic,
@@ -150,7 +151,10 @@ const App = () => {
         copiedAllResponses.splice(copiedAllResponses.length - 1, 1);
         sortTempResponses(copiedAllResponses);
         setAllResponses(copiedAllResponses);
+        //---------------------
+        // need to add checker to identify whether copiedAllResponses is ACTUALLY UPDATED
         console.log("new response ADDED to allResponses");
+        //---------------------
       } else {
         // debugger;
         // if qs already answered, verify checkboxes -> add or remove checkboxes accordingly
