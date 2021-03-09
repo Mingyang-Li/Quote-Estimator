@@ -118,7 +118,7 @@ const App = () => {
   function updateMultiSelect(response) {
     // if allResponse is empty, add new response
     if (allResponses.length === 0) {
-      console.log("allResponse is empty, need to add new response");
+      // console.log("allResponse is empty, need to add new response");
       const tempResponse = [
         {
           questionNumber: response.questionNumber,
@@ -128,17 +128,21 @@ const App = () => {
           userResponse: [response.userResponse],
         },
       ];
-      setAllResponses(tempResponse);      
+      setAllResponses(tempResponse); 
+      console.log("first response added to empty allResponses");     
+      debugger;
     } else {
+      debugger;
+      console.log("dealing with the +=2nd checkbox for this question");
       // console.table(response);
       let copiedAllResponses = allResponses.map((res) => ({ ...res }));
       const answeredQs = getAnsweredQs(copiedAllResponses);
 
       // if qs is new, (reaponse is also new), add new response
       if (answeredQs.includes(response.questionNumber) === false) {
-        console.log(
-          "allResponses is NOT empty, but this question hasn't been answered yet"
-        );
+        // console.log(
+        //   "allResponses is NOT empty, but this question hasn't been answered yet"
+        // );
         // debugger;
         let newResponse = {
           questionNumber: response.questionNumber,
@@ -147,18 +151,11 @@ const App = () => {
           questiontext: response.questionText,
           userResponse: [response.userResponse],
         };
-        // debugger;
         copiedAllResponses = [...copiedAllResponses, newResponse];
-        // debugger;
-        // debugger;
         sortTempResponses(copiedAllResponses);
         // debugger;
         setAllResponses(copiedAllResponses);
-        // debugger;
-        //---------------------
-        // need to add checker to identify whether copiedAllResponses is ACTUALLY UPDATED
         console.log("new response ADDED to allResponses");
-        //---------------------
       } else {
         // debugger;
         // if qs already answered, verify checkboxes -> add or remove checkboxes accordingly
@@ -169,11 +166,13 @@ const App = () => {
         //has been answered (at least 1 checkbox is checked), else selectedCheckboxes remains an empty array
         if (answeredQs.includes(response.questionNumber) === false){
           getSelectedCheckboxes(response);
+          console.log("selectedCheckboxesis NOT empty")
         }
 
         // Check: If selected checkbox option already exists in selectedCheckboxes and there are >= 2 checkboxes currently being chcked, remove it from selectedCheckboxes
         // Check: If selected checkbox option already exists in selectedCheckboxes and there are only i checkbox is being checked, remove the entire current question from allResponses
         if (selectedCheckboxes.includes(response.userResponse)) {
+          console.log("option unchecked, need to POP it from state!")
           selectedCheckboxes.pop(
             selectedCheckboxes.indexOf(response.userResponse)
           );
