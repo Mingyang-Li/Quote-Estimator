@@ -6,7 +6,7 @@ import { useContext } from "react";
 import GlobalContext from "../Contexts/GlobalContext";
 
 const QuestionPage = () => {
-  const { allResponses } = useContext(GlobalContext);
+  const { allResponses, totalPrice } = useContext(GlobalContext);
   return (
     <>
       <code>{JSON.stringify(allResponses)}</code>

@@ -25,10 +25,6 @@ const SingleSelectOptions = () => {
           optionPrice: currQuestion.answerOptions[i].price,
         },
       });
-
-      // console.log(
-      //   `question ${currQuestion.questionNumber} option ${currQuestion.answerOptions[i].answerText} is mapped`
-      // );
     }
     return allAnswers;
   };
