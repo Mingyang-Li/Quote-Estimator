@@ -5,7 +5,6 @@ import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import QuestionPage from "./Pages/QuestionPage";
 import ResponsesPage from "./Pages/ResponsesPage";
 import QuestionData from "./Components/QuestionPageContents/QuestionData";
-import TestingData from "./Components/QuestionPageContents/TestingData";
 
 const App = () => {
   const [questionIndex, setQuestionIndex] = useState(4);
