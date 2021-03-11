@@ -3,17 +3,18 @@ import Paper from "@material-ui/core/Paper"
 import NextQuestionButton from "../Buttons/MainButtons/NextQuestionButton";
 import PreviousQuestionButton from "../Buttons/MainButtons/PreviousQuestionButton";
 
-const MainButtonGroup = (props) => {
+const MainButtonGroup = () => {
   return (
     <>
-      <Grid container spacing={24}>
-        <Grid item xs={5}>
+      <Grid container spacing={1}>
+        <Grid item xs={6} sm={12} lg={12}> 
           <PreviousQuestionButton/>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6} sm={12} lg={12}>
           <NextQuestionButton/>
         </Grid>
       </Grid>
+      <br></br>
     </>
   );
 };

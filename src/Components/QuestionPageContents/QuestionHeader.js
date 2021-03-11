@@ -11,12 +11,12 @@ const QuestionHeader = () => {
     <>
       <Card>
         <CardContent>
-          <h1>
+          <Typography variant="h5" gutterBottom>
             {QuestionData[questionIndex].questionNumber}. {QuestionData[questionIndex].questionTopic} 
-          </h1>
-          <h2>
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom>
             {QuestionData[questionIndex].questionText}
-          </h2>
+          </Typography>
         </CardContent>
       </Card>
     </>

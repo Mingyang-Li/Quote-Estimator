@@ -5,7 +5,7 @@ import GlobalContext from '../../../Contexts/GlobalContext';
 const ClearAllButton = () => {
     const { clearAll } = useContext(GlobalContext);
     return (
-        <Button color="secondary" variant="contained" onClick={clearAll}>
+        <Button color="secondary" size="large" fullWidth variant="contained" onClick={clearAll}>
             Clear All
         </Button>
     )

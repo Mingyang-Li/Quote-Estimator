@@ -5,7 +5,7 @@ import GlobalContext from '../../../Contexts/GlobalContext';
 const BackToStartButton = () => {
     const { backToStart } = useContext(GlobalContext)
     return (
-        <Button color="secondary" variant="contained" onClick={backToStart}>
+        <Button color="secondary" size="large" fullWidth variant="contained" onClick={backToStart}>
             Back to Start
         </Button>
     )

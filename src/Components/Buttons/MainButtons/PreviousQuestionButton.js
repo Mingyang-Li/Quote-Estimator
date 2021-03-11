@@ -5,7 +5,13 @@ import GlobalContext from "../../../Contexts/GlobalContext";
 const PreviousQuestionButton = () => {
   const { prevQuestion } = useContext(GlobalContext);
   return (
-    <Button color="secondary" variant="contained" onClick={prevQuestion}>
+    <Button 
+      color="secondary" 
+      size="large" 
+      fullWidth 
+      variant="contained" 
+      onClick={prevQuestion}
+    >
       Prev
     </Button>
   );

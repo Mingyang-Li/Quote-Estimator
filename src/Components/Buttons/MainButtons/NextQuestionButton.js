@@ -6,7 +6,13 @@ const NextQuestionButton = () => {
   const { nextQuestion } = useContext(GlobalContext)
 
   return (
-    <Button color="primary" variant="contained" onClick={nextQuestion}>
+    <Button 
+      color="primary" 
+      size="large" 
+      fullWidth 
+      variant="contained" 
+      onClick={nextQuestion}
+      >
       Next
     </Button>
   );
