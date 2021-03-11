@@ -6,6 +6,7 @@ import QuestionPage from "./Pages/QuestionPage";
 import ResponsesPage from "./Pages/ResponsesPage";
 import QuestionData from "./Components/QuestionPageContents/QuestionData";
 import TestingData from "./Components/QuestionPageContents/TestingData";
+import { CompareArrowsOutlined } from "@material-ui/icons";
 
 const App = () => {
   const [questionIndex, setQuestionIndex] = useState(4);
@@ -118,8 +119,9 @@ const App = () => {
 
   function updateMultiSelect(response) {
     let copiedAllResponses = allResponses.map((res) => ({ ...res }));
-    const answeredQs = copiedAllResponses.length === 0 ? [] : getAnsweredQs(copiedAllResponses);
-    
+    const answeredQs =
+      copiedAllResponses.length === 0 ? [] : getAnsweredQs(copiedAllResponses);
+
     // if allResponse is empty, add new response
     if (allResponses.length === 0) {
       // console.log("allResponse is empty, need to add new response");
@@ -132,11 +134,10 @@ const App = () => {
           userResponse: [response.userResponse],
         },
       ];
-      setAllResponses(tempResponse); 
-      console.log("first response added to empty allResponses");     
+      setAllResponses(tempResponse);
+      console.log("first response added to empty allResponses");
       //debugger;
     } else {
-      
       // console.log("dealing with the +=2nd checkbox for this question");
       // let copiedAllResponses = allResponses.map((res) => ({ ...res }));
       // const answeredQs = copiedAllResponses.length === 0 ? [] : getAnsweredQs(copiedAllResponses);
@@ -166,33 +167,50 @@ const App = () => {
         // Extract an array of selected options (selectedCheckboxes)
         let selectedCheckboxes = [];
 
-        // This if statement simply updates selectedCheckboxes to an array of objects if this multi-select 
+        // This if statement simply updates selectedCheckboxes to an array of objects if this multi-select
         //has been answered (at least 1 checkbox is checked), else selectedCheckboxes remains an empty array
-        if (answeredQs.includes(response.questionNumber) === false){
+        if (answeredQs.includes(response.questionNumber) === false) {
           getSelectedCheckboxes(response);
-          console.log("selectedCheckboxesis NOT empty")
+          console.log("selectedCheckboxesis NOT empty");
         }
 
-        console.log("selectedCheckboxes: " +selectedCheckboxes)
-
-        // Check: If selected checkbox option already exists in selectedCheckboxes and there are >= 2 checkboxes currently being chcked, remove it from selectedCheckboxes
-        // Check: If selected checkbox option already exists in selectedCheckboxes and there are only i checkbox is being checked, remove the entire current question from allResponses
+        console.log("selectedCheckboxes: " + selectedCheckboxes);
         if (selectedCheckboxes.includes(response.userResponse)) {
-          console.log("option unchecked, need to POP it from state!")
-          selectedCheckboxes.pop(
-            selectedCheckboxes.indexOf(response.userResponse)
-          );
           // Assign selectedCheckboxes to the userResponse object of copiedAllResponses
           // First, get index of question to have its checkboxes obj replaced
-          let i = getIndexOfQuestion(response);
+          const i = getIndexOfQuestion(response);
+          CompareArrowsOutlined.log(
+            "selectedCheckboxes: " + selectedCheckboxes
+          );
 
-          // Use the obtained index i to get the question to replace checkboxes from
-          copiedAllResponses[i].userResponse = selectedCheckboxes;
+          // Deciding if we should remove the checkbox or the entire response
+          switch (selectedCheckboxes.length) {
+            case 1:
+              // if selectedCheckboxes only has 1 option, we just remove the entire response from copiedAllResponses
+              copiedAllResponses.splice(i, 1);
+              break;
+            default:
+              // If there are more than 1 (>= 2) options in selectedCheckboxes, just remove the option from selectedCheckboxes
+              selectedCheckboxes.splice(
+                selectedCheckboxes.indexOf(response.userResponse),
+                1
+              );
+
+              // Use the obtained index i to get the question to replace checkboxes from
+              copiedAllResponses[i].userResponse = selectedCheckboxes;
+              break;
+          }
           setAllResponses(copiedAllResponses);
-          console.log("checkbox unchecked, data removed from allResponses");
-        } // Else if selectedCheckboxes is NOT empty && but the option does not exist yet, add it to selectedCheckboxes
-          else if (selectedCheckboxes.length > 0 && selectedCheckboxes.includes(response.userResponse) === false){
-            console.log("if selectedCheckboxes is NOT empty && but the option does not exist yet, add it to selectedCheckboxes");
+        }
+
+        // Else if selectedCheckboxes is NOT empty && but the option does not exist yet, add it to selectedCheckboxes
+        else if (
+          selectedCheckboxes.length > 0 &&
+          selectedCheckboxes.includes(response.userResponse) === false
+        ) {
+          console.log(
+            "if selectedCheckboxes is NOT empty && but the option does not exist yet, add it to selectedCheckboxes"
+          );
           selectedCheckboxes = [...selectedCheckboxes, response.userResponse];
           // selectedCheckboxes.splice(selectedCheckboxes.length - 1, 1);
           // Assign selectedCheckboxes to the userResponse object of copiedAllResponses
@@ -202,7 +220,7 @@ const App = () => {
           setAllResponses(copiedAllResponses);
           console.log("new response added to allResponses");
         } // Else if selectedCheckboxes === [], add new response to allResponses
-          else if (selectedCheckboxes.length === 0){
+        else if (selectedCheckboxes.length === 0) {
           let newResponse = {
             questionNumber: response.questionNumber,
             questionTopic: response.questionTopic,
@@ -220,34 +238,36 @@ const App = () => {
     }
   }
   // Function to populate answeredQs
-  function getAnsweredQs(answeredQuestions) {
+  const getAnsweredQs = (answeredQuestions) => {
     let tempArr = [];
     for (let i = 0; i < answeredQuestions.length; i++) {
       tempArr.push(answeredQuestions[i].questionNumber);
     }
     return tempArr;
-  }
+  };
 
   // Function to obtain an array of selected checkboxes of a selected question
-  function getSelectedCheckboxes(currResponse) {
+  const getSelectedCheckboxes = (currResponse) => {
     for (let i = 0; i < allResponses.length; i++) {
       if (allResponses[i].questionNumber === currResponse.questionNumber) {
         // console.log("match found!");
         return allResponses[i].userResponse;
       }
-    } return [];
-  }
+    }
+    return [];
+  };
 
-  function getIndexOfQuestion(currResponse) {
+  // Function to get index of currQuestion from allResponses
+  const getIndexOfQuestion = (currResponse) => {
     for (let i = 0; i < allResponses.length; i++) {
       if (allResponses[i].questionNumber === currResponse.questionNumber) {
         return i;
       }
     }
-  }
+  };
 
   // Sort allResponses by questionnNumber (ascending) when called
-  function sortTempResponses(responses) {
+  const sortTempResponses = (responses) => {
     if (responses.length > 1) {
       responses.sort((item1, item2) => {
         if (item1.questionNumber > item2.questionNumber) {
@@ -257,8 +277,9 @@ const App = () => {
         }
       });
     }
-  }
+  };
 
+  // Function that adds up all prices from allResponses
   const calculateTotalPrice = () => {
     let newTotal = 0;
     allResponses.forEach((response) => {
@@ -276,6 +297,7 @@ const App = () => {
     setTotalPrice(newTotal);
   };
 
+  // Gathering all the states and methods to be passed down to child components
   const tools = {
     questionIndex,
     selectionType,
