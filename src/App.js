@@ -21,7 +21,7 @@ const App = () => {
     if (questionIndex < QuestionData.length - 1) {
       setQuestionIndex(questionIndex + 1);
     } else {
-      setClickedCalculateCost(!clickedCalculateCost);
+      setClickedCalculateCost(prev => !prev);
     }
   };
 
@@ -30,7 +30,7 @@ const App = () => {
       setQuestionIndex(questionIndex - 1);
     } else if (questionIndex === QuestionData.length - 1) {
       setQuestionIndex(questionIndex - 1);
-      setClickedCalculateCost(!clickedCalculateCost);
+      setClickedCalculateCost(prev => !prev);
     }
   };
 
@@ -55,7 +55,7 @@ const App = () => {
         // console.log("firing updateMultiSelect");
         updateMultiSelect(selectedResponse);
     }
-    // calculateTotalPrice();
+    calculateTotalPrice();
   };
 
   function updateSingleSelect(response) {

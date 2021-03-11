@@ -6,11 +6,11 @@ import PreviousQuestionButton from "../Buttons/MainButtons/PreviousQuestionButto
 const MainButtonGroup = () => {
   return (
     <>
-      <Grid container spacing={1}>
-        <Grid item xs={6} sm={12} lg={12}> 
+      <Grid container spacing={1} direction-lg-row-reverse>
+        <Grid item xs={6} sm={12} lg={12}>
           <PreviousQuestionButton/>
         </Grid>
-        <Grid item xs={6} sm={12} lg={12}>
+        <Grid item xs={6} sm={12} lg={12}> 
           <NextQuestionButton/>
         </Grid>
       </Grid>

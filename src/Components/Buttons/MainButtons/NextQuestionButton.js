@@ -1,9 +1,10 @@
 import { Button } from "@material-ui/core";
 import { useContext } from "react";
 import GlobalContext from "../../../Contexts/GlobalContext";
+import QuestionData from "../../QuestionPageContents/QuestionData";
 
 const NextQuestionButton = () => {
-  const { nextQuestion } = useContext(GlobalContext)
+  const { questionIndex, nextQuestion } = useContext(GlobalContext);
 
   return (
     <Button 
@@ -13,7 +14,7 @@ const NextQuestionButton = () => {
       variant="contained" 
       onClick={nextQuestion}
       >
-      Next
+      {questionIndex + 1 === QuestionData.length ? "Calculate Total" : "Next"}
     </Button>
   );
 };

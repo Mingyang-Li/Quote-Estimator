@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import GlobalContext from '../../Contexts/GlobalContext';
 
 const QuestionHeader = () => {
-  const {questionIndex} = useContext(GlobalContext);
+  const { questionIndex, totalPrice } = useContext(GlobalContext);
   return (
     <>
       <Card>
@@ -16,6 +16,9 @@ const QuestionHeader = () => {
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
             {QuestionData[questionIndex].questionText}
+          </Typography>
+          <Typography variant="subtitle2" gutterBottom>
+            Current total: ${totalPrice}
           </Typography>
         </CardContent>
       </Card>
