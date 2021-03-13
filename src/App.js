@@ -219,7 +219,7 @@ const App = () => {
     }
   }
   // Function to populate answeredQs
-  function getAnsweredQs(answeredQuestions) {
+  const getAnsweredQs = (answeredQuestions) => {
     let tempArr = [];
     for (let i = 0; i < answeredQuestions.length; i++) {
       tempArr.push(answeredQuestions[i].questionNumber);
@@ -228,7 +228,7 @@ const App = () => {
   }
 
   // Function to obtain an array of selected checkboxes of a selected question
-  function getSelectedCheckboxes(currResponse) {
+  const getSelectedCheckboxes = (currResponse) => {
     for (let i = 0; i < allResponses.length; i++) {
       if (allResponses[i].questionNumber === currResponse.questionNumber) {
         // console.log("match found!");
@@ -237,7 +237,7 @@ const App = () => {
     } return [];
   }
 
-  function getIndexOfQuestion(currResponse) {
+  const getIndexOfQuestion = (currResponse) => {
     for (let i = 0; i < allResponses.length; i++) {
       if (allResponses[i].questionNumber === currResponse.questionNumber) {
         return i;
@@ -246,7 +246,7 @@ const App = () => {
   }
 
   // Sort allResponses by questionnNumber (ascending) when called
-  function sortTempResponses(responses) {
+  const sortTempResponses = (responses) => {
     if (responses.length > 1) {
       responses.sort((item1, item2) => {
         if (item1.questionNumber > item2.questionNumber) {
